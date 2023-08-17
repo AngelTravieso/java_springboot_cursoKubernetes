@@ -58,4 +58,15 @@ public class UsuarioController {
         return ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(Long id) {
+        Optional<Usuario> usuarioBD = usuarioService.porId(id);
+        if(usuarioBD.isPresent()) {
+            usuarioService.eliminar(id);
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
 }
