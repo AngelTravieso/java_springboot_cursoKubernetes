@@ -47,14 +47,11 @@ public class UsuarioController {
     public ResponseEntity<?> editar(@RequestBody() Usuario usuario, @PathVariable Long id) {
         Optional<Usuario> usuarioBD = usuarioService.porId(id);
         if(usuarioBD.isPresent()) {
-            Usuario usuarioData = usuarioBD.get();
-            usuarioData.setNombre(usuario.getNombre());
-            usuario.setEmail(usuario.getEmail());
-            usuario.setPassword(usuario.getPassword());
-
-            usuarioService.guardar(usuarioData);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioData);
+            Usuario usuarioActualizado = usuarioBD.get();
+            usuarioActualizado.setNombre(usuario.getNombre());
+            usuarioActualizado.setEmail(usuario.getEmail());
+            usuarioActualizado.setPassword(usuario.getPassword());
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuarioActualizado));
         }
 
         return ResponseEntity.notFound().build();

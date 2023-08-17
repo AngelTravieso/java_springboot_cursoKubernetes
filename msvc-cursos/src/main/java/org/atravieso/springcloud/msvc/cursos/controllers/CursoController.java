@@ -41,7 +41,7 @@ public class CursoController {
         Optional<Curso> cursoDB = cursoService.porId(id);
         if(cursoDB.isPresent()) {
             Curso cursoActualizado = cursoDB.get();
-            curso.setNombre(curso.getNombre());
+            cursoActualizado.setNombre(curso.getNombre());
             return ResponseEntity.status(HttpStatus.CREATED).body(cursoService.guardar(cursoActualizado));
         }
 
