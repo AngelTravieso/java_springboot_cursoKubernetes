@@ -3,6 +3,7 @@ package org.atravieso.springcloud.msvc.usuarios.controllers;
 import org.atravieso.springcloud.msvc.usuarios.models.entity.Usuario;
 import org.atravieso.springcloud.msvc.usuarios.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,27 @@ public class UsuarioController {
         }
 
         // Con build generamos la respuesta con status 404 - NOT_FOUND
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    // @ResponseStatus(HttpStatus.CREATED) // -> Retornar un 201, ya que por defecto regresa un 200
+    public ResponseEntity<?> crear(@RequestBody Usuario usuario) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuario));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@RequestBody() Usuario usuario, @PathVariable() Long id) {
+        Optional<Usuario> usuarioBD = usuarioService.porId(id);
+        if(usuarioBD.isPresent()) {
+            Usuario usuarioData = usuarioBD.get();
+            usuarioData.setNombre(usuario.getNombre());
+            usuario.setEmail(usuario.getEmail());
+            usuario.setPassword(usuario.getPassword());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioData);
+        }
+
         return ResponseEntity.notFound().build();
     }
 
