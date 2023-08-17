@@ -44,13 +44,15 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editar(@RequestBody() Usuario usuario, @PathVariable() Long id) {
+    public ResponseEntity<?> editar(@RequestBody() Usuario usuario, @PathVariable Long id) {
         Optional<Usuario> usuarioBD = usuarioService.porId(id);
         if(usuarioBD.isPresent()) {
             Usuario usuarioData = usuarioBD.get();
             usuarioData.setNombre(usuario.getNombre());
             usuario.setEmail(usuario.getEmail());
             usuario.setPassword(usuario.getPassword());
+
+            usuarioService.guardar(usuarioData);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(usuarioData);
         }
@@ -59,7 +61,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(Long id) {
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
         Optional<Usuario> usuarioBD = usuarioService.porId(id);
         if(usuarioBD.isPresent()) {
             usuarioService.eliminar(id);
