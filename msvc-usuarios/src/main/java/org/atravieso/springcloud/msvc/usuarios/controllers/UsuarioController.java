@@ -42,17 +42,17 @@ public class UsuarioController {
     // @ResponseStatus(HttpStatus.CREATED) // -> Retornar un 201, ya que por defecto regresa un 200
     public ResponseEntity<?> crear(@Valid @RequestBody Usuario usuario, BindingResult result) { // @Valid -> Validar que el usuario que se está enviando del Request se valide
 
-        // Si el email existe
-        if(usuarioService.porEmail(usuario.getEmail()).isPresent()) {
+        // Verificar si hay errores de validación
+        if(result.hasErrors()) {
+            return validar(result);
+        }
+
+        // Si el email no está vacio y el email existe
+        if(!usuario.getEmail().isEmpty() && usuarioService.existePorEmail(usuario.getEmail())) {
             // Retorno un map { mensaje: "Ya existe un usuario...." }
             return ResponseEntity.badRequest().body(
                     Collections.singletonMap("mensaje", "Ya existe un usuario con ese correo electrónico")
             );
-        }
-
-        // Verificar si hay errores
-        if(result.hasErrors()) {
-            return validar(result);
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuario));
@@ -61,7 +61,7 @@ public class UsuarioController {
     @PutMapping("/{id}")
     public ResponseEntity<?> editar(@Valid @RequestBody() Usuario usuario, BindingResult result, @PathVariable Long id) {
 
-        // Verificar si hay errores
+        // Verificar si hay errores de validación
         if(result.hasErrors()) {
             return validar(result);
         }
@@ -72,7 +72,7 @@ public class UsuarioController {
             Usuario usuarioDb = o.get();
 
             // Si el email existe
-            if(!usuario.getEmail().equalsIgnoreCase(usuarioDb.getEmail()) && usuarioService.porEmail(usuario.getEmail()).isPresent()) {
+            if(!usuario.getEmail().isEmpty() && !usuario.getEmail().equalsIgnoreCase(usuarioDb.getEmail()) && usuarioService.porEmail(usuario.getEmail()).isPresent()) {
                 System.out.println("Se repite");
                 // Retorno un map { mensaje: "Ya existe un usuario...." }
                 return ResponseEntity.badRequest().body(
