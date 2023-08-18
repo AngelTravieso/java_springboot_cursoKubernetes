@@ -9,10 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class UsuarioController {
@@ -44,6 +41,15 @@ public class UsuarioController {
     @PostMapping
     // @ResponseStatus(HttpStatus.CREATED) // -> Retornar un 201, ya que por defecto regresa un 200
     public ResponseEntity<?> crear(@Valid @RequestBody Usuario usuario, BindingResult result) { // @Valid -> Validar que el usuario que se está enviando del Request se valide
+
+        // Si el email existe
+        if(usuarioService.porEmail(usuario.getEmail()).isPresent()) {
+            // Retorno un map { mensaje: "Ya existe un usuario...." }
+            return ResponseEntity.badRequest().body(
+                    Collections.singletonMap("mensaje", "Ya existe un usuario con ese correo electrónico")
+            );
+        }
+
         // Verificar si hay errores
         if(result.hasErrors()) {
             return validar(result);
@@ -54,18 +60,32 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> editar(@Valid @RequestBody() Usuario usuario, BindingResult result, @PathVariable Long id) {
+
         // Verificar si hay errores
         if(result.hasErrors()) {
             return validar(result);
         }
 
-        Optional<Usuario> usuarioBD = usuarioService.porId(id);
-        if(usuarioBD.isPresent()) {
-            Usuario usuarioActualizado = usuarioBD.get();
-            usuarioActualizado.setNombre(usuario.getNombre());
-            usuarioActualizado.setEmail(usuario.getEmail());
-            usuarioActualizado.setPassword(usuario.getPassword());
-            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuarioActualizado));
+        Optional<Usuario> o = usuarioService.porId(id);
+
+        if(o.isPresent()) {
+            Usuario usuarioDb = o.get();
+
+            // Si el email existe
+            if(!usuario.getEmail().equalsIgnoreCase(usuarioDb.getEmail()) && usuarioService.porEmail(usuario.getEmail()).isPresent()) {
+                System.out.println("Se repite");
+                // Retorno un map { mensaje: "Ya existe un usuario...." }
+                return ResponseEntity.badRequest().body(
+                        Collections.singletonMap("mensaje", "Ya existe un usuario con ese correo electrónico")
+                );
+            }
+
+            System.out.println("No se repite");
+
+            usuarioDb.setNombre(usuario.getNombre());
+            usuarioDb.setEmail(usuario.getEmail());
+            usuarioDb.setPassword(usuario.getPassword());
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.guardar(usuarioDb));
         }
 
         return ResponseEntity.notFound().build();
