@@ -1,7 +1,7 @@
 package org.atravieso.springcloud.msvc.cursos.controllers;
 
 import jakarta.validation.Valid;
-import org.atravieso.springcloud.msvc.cursos.entity.Curso;
+import org.atravieso.springcloud.msvc.cursos.models.entity.Curso;
 import org.atravieso.springcloud.msvc.cursos.services.CursoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

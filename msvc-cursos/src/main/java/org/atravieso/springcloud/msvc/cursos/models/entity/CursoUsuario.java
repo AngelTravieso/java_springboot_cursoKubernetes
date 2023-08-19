@@ -1,4 +1,4 @@
-package org.atravieso.springcloud.msvc.cursos.entity;
+package org.atravieso.springcloud.msvc.cursos.models.entity;
 
 import jakarta.persistence.*;
 

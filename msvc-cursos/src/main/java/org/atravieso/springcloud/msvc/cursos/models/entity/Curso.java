@@ -1,7 +1,8 @@
-package org.atravieso.springcloud.msvc.cursos.entity;
+package org.atravieso.springcloud.msvc.cursos.models.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import org.atravieso.springcloud.msvc.cursos.models.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +18,20 @@ public class Curso {
     @NotEmpty
     private String nombre;
 
-    // Un solo curso puede tener muchos cursosusuarios
+    // Un solo curso puede tener muchos cursosUsuarios
     // CascadeType.All -> Cada vez que se crea/elimina un curso con usuarios primero guarda el curso y en cascada guarda/elimina los usuarios
-    // orphanRemoval (true) -> Que no queden volando cursoId que no estan asignados a ningún curso en particular, todos los ID de curso que sean nulo que los elimine
+    // orphanRemoval (true) -> Que no queden volando cursoId que no están asignados a ningún curso en particular, todos los ID de curso que sean nulo que los elimine
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "curso_id") // FK
     private List<CursoUsuario> cursoUsuarios;
 
+    // Para indicar que no está mapeado a persistencia, no está mapeado a una tabla
+    @Transient
+    private List<Usuario> usuarios;
+
     public Curso() {
-        cursoUsuarios = new ArrayList<CursoUsuario>();
+        cursoUsuarios = new ArrayList<>();
+        usuarios = new ArrayList<>();
     }
 
     public Long getId() {
@@ -57,5 +64,13 @@ public class Curso {
 
     public void setCursoUsuarios(List<CursoUsuario> cursoUsuarios) {
         this.cursoUsuarios = cursoUsuarios;
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 }
