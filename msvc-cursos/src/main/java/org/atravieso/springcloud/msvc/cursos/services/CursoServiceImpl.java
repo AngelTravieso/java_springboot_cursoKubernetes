@@ -1,5 +1,6 @@
 package org.atravieso.springcloud.msvc.cursos.services;
 
+import org.atravieso.springcloud.msvc.cursos.clients.UsuarioClientRest;
 import org.atravieso.springcloud.msvc.cursos.models.Usuario;
 import org.atravieso.springcloud.msvc.cursos.models.entity.Curso;
 import org.atravieso.springcloud.msvc.cursos.repositories.CursoRepository;
@@ -15,6 +16,9 @@ public class CursoServiceImpl implements CursoService {
 
     @Autowired
     private CursoRepository cursoRepository;
+
+    @Autowired
+    private UsuarioClientRest usuarioClient;
 
     @Override
     @Transactional(readOnly = true)
