@@ -72,16 +72,16 @@ public class CursoController {
     }
 
     @PutMapping("/asignar-usuario/{cursoId}")
-    public ResponseEntity<?> asignarUsuario(@RequestBody Usuario usuario, @PathVariable Long id) {
+    public ResponseEntity<?> asignarUsuario(@RequestBody Usuario usuario, @PathVariable Long cursoId) {
         Optional<Usuario> o;
 
         // Intentar comunicarnos al msvc-usuarios
         try {
             // Asignar usuario al curso
-            o = cursoService.asignarUsuario(usuario, id);
+            o = cursoService.asignarUsuario(usuario, cursoId);
 
         } catch (FeignException e) {
-            // Si ocurre algún error con el microservicio (comunicacion, etc)
+            // Si ocurre algún error con el microservicio (comunicación, etc)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     Collections.singletonMap("mensaje", String.format("No se puedo crear el usuario o error en la comunicación: %s", e.getMessage()))
             );
@@ -98,16 +98,16 @@ public class CursoController {
     }
 
     @PostMapping("/crear-usuario/{cursoId}")
-    public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario, @PathVariable Long id) {
+    public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario, @PathVariable Long cursoId) {
         Optional<Usuario> o;
 
         // Intentar comunicarnos al msvc-usuarios
         try {
             // Asignar usuario al curso
-            o = cursoService.crearUsuario(usuario, id);
+            o = cursoService.crearUsuario(usuario, cursoId);
 
         } catch (FeignException e) {
-            // Si ocurre algún error con el microservicio (comunicacion, etc)
+            // Si ocurre algún error con el microservicio (comunicación, etc)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     Collections.singletonMap("mensaje", String.format("No se pudo crear el usuario o error en la comunicación: %s", e.getMessage()))
             );
@@ -124,16 +124,16 @@ public class CursoController {
     }
 
     @DeleteMapping("/eliminar-usuario/{cursoId}")
-    public ResponseEntity<?> eliminarUsuario(@RequestBody Usuario usuario, @PathVariable Long id) {
+    public ResponseEntity<?> eliminarUsuario(@RequestBody Usuario usuario, @PathVariable Long cursoId) {
         Optional<Usuario> o;
 
         // Intentar comunicarnos al msvc-usuarios
         try {
             // Asignar usuario al curso
-            o = cursoService.eliminarUsuario(usuario, id);
+            o = cursoService.eliminarUsuario(usuario, cursoId);
 
         } catch (FeignException e) {
-            // Si ocurre algún error con el microservicio (comunicacion, etc)
+            // Si ocurre algún error con el microservicio (comunicación, etc)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     Collections.singletonMap("mensaje", String.format("No se puedo eliminar el usuario o error en la comunicación: %s", e.getMessage()))
             );

@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 // Habilitar en la aplicación el contexto de feign para poder implementar la API rest que comunica a los microservicios de forma declarativa
-@EnableFeignClients
 @SpringBootApplication
+@EnableFeignClients
 public class MsvcCursosApplication {
 
 	public static void main(String[] args) {
