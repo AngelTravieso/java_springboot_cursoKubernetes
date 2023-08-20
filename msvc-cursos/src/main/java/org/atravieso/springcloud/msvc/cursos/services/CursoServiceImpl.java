@@ -49,7 +49,7 @@ public class CursoServiceImpl implements CursoService {
     @Transactional
     public Optional<Usuario> asignarUsuario(Usuario usuario, Long cursoId) {
 
-        // Buscar el curso en al BD
+        // Buscar el curso en la BD
         Optional<Curso> o = cursoRepository.findById(cursoId);
 
         // Si existe el curso en la BD

@@ -1,6 +1,8 @@
 package org.atravieso.springcloud.msvc.cursos.controllers;
 
+import feign.FeignException;
 import jakarta.validation.Valid;
+import org.atravieso.springcloud.msvc.cursos.models.Usuario;
 import org.atravieso.springcloud.msvc.cursos.models.entity.Curso;
 import org.atravieso.springcloud.msvc.cursos.services.CursoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class CursoController {
@@ -70,6 +69,84 @@ public class CursoController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/asignar-usuario/{cursoId}")
+    public ResponseEntity<?> asignarUsuario(@RequestBody Usuario usuario, @PathVariable Long id) {
+        Optional<Usuario> o;
+
+        // Intentar comunicarnos al msvc-usuarios
+        try {
+            // Asignar usuario al curso
+            o = cursoService.asignarUsuario(usuario, id);
+
+        } catch (FeignException e) {
+            // Si ocurre algún error con el microservicio (comunicacion, etc)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Collections.singletonMap("mensaje", String.format("No se puedo crear el usuario o error en la comunicación: %s", e.getMessage()))
+            );
+        }
+
+        // Si no hubo problema y el usuario existe
+        if(o.isPresent()) {
+            // Retornar el objeto usuario que asignamos
+            return ResponseEntity.status(HttpStatus.CREATED).body(o.get());
+        }
+        // Si no existe devolver un 404
+        return ResponseEntity.notFound().build();
+
+    }
+
+    @PostMapping("/crear-usuario/{cursoId}")
+    public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario, @PathVariable Long id) {
+        Optional<Usuario> o;
+
+        // Intentar comunicarnos al msvc-usuarios
+        try {
+            // Asignar usuario al curso
+            o = cursoService.crearUsuario(usuario, id);
+
+        } catch (FeignException e) {
+            // Si ocurre algún error con el microservicio (comunicacion, etc)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Collections.singletonMap("mensaje", String.format("No se pudo crear el usuario o error en la comunicación: %s", e.getMessage()))
+            );
+        }
+
+        // Si no hubo problema y el usuario existe
+        if(o.isPresent()) {
+            // Retornar el objeto usuario que asignamos
+            return ResponseEntity.status(HttpStatus.CREATED).body(o.get());
+        }
+        // Si no existe devolver un 404
+        return ResponseEntity.notFound().build();
+
+    }
+
+    @DeleteMapping("/eliminar-usuario/{cursoId}")
+    public ResponseEntity<?> eliminarUsuario(@RequestBody Usuario usuario, @PathVariable Long id) {
+        Optional<Usuario> o;
+
+        // Intentar comunicarnos al msvc-usuarios
+        try {
+            // Asignar usuario al curso
+            o = cursoService.eliminarUsuario(usuario, id);
+
+        } catch (FeignException e) {
+            // Si ocurre algún error con el microservicio (comunicacion, etc)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Collections.singletonMap("mensaje", String.format("No se puedo eliminar el usuario o error en la comunicación: %s", e.getMessage()))
+            );
+        }
+
+        // Si no hubo problema y el usuario existe
+        if(o.isPresent()) {
+            // Retornar el objeto usuario que asignamos
+            return ResponseEntity.status(HttpStatus.CREATED).body(o.get());
+        }
+        // Si no existe devolver un 404
+        return ResponseEntity.notFound().build();
+
     }
 
     // Método para validar el body de la petición
