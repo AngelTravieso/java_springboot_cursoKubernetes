@@ -154,6 +154,12 @@ public class CursoController {
 
     }
 
+    @DeleteMapping("/eliminar-usuario/{usuarioId}")
+    public ResponseEntity<?> eliminarCursoUsuarioPorId(@PathVariable Long usuarioId) {
+        cursoService.eliminarCursoUsuarioPorId(usuarioId);
+        return ResponseEntity.noContent().build();
+    }
+
     // Método para validar el body de la petición
     private static ResponseEntity<Map<String, String>> validar(BindingResult result) {
         Map<String, String> errores = new HashMap<>();

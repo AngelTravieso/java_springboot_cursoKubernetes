@@ -21,4 +21,6 @@ public interface CursoService {
     // Esto quita al usuario de un curso en particular, esto NO lo elimina de la BD usuarios del msvc-usuarios, esto permite que el usuario lo podamos asignar a otro curso
     Optional<Usuario> eliminarUsuario(Usuario usuario, Long cursoId);
 
+    void eliminarCursoUsuarioPorId(Long id);
+
 }
