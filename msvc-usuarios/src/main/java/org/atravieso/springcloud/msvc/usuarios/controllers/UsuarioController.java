@@ -38,6 +38,11 @@ public class UsuarioController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/usuarios-por-curso")
+    public ResponseEntity<?> obtenerAlumnosPorCurso(@RequestParam List<Long> ids) {
+        return ResponseEntity.ok(usuarioService.listarUsuariosPorIds(ids));
+    }
+
     @PostMapping
     // @ResponseStatus(HttpStatus.CREATED) // -> Retornar un 201, ya que por defecto regresa un 200
     public ResponseEntity<?> crear(@Valid @RequestBody Usuario usuario, BindingResult result) { // @Valid -> Validar que el usuario que se está enviando del Request se valide

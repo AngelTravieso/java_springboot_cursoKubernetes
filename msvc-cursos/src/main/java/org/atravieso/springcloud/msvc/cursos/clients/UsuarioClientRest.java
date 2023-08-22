@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 // Name declarado en el application.properties del msvc-usuarios
 // url del msvc-usuarios
-@FeignClient(name="msvc-usuarios", url = "localhost:8001")
+@FeignClient(name="msvc-usuarios", url = "localhost:8081")
 public interface UsuarioClientRest {
 
     @GetMapping("/{id}")
