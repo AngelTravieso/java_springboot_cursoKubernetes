@@ -1,4 +1,4 @@
-FROM amazoncorretto:latest
+FROM openjdk:21-ea-oracle
 
 ## Carpeta de trabajo dentro de este SO
 WORKDIR /app
