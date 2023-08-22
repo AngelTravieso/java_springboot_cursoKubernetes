@@ -30,7 +30,7 @@ public class CursoController {
         // Optional<Curso> curso = cursoService.porId(id);
 
         // Obtener los cursos con los usuarios (objetos completos)
-        Optional<Curso> curso = cursoService.porIdconUsuarios(id);
+        Optional<Curso> curso = cursoService.porIdConUsuarios(id);
 
         if(curso.isPresent()) {
             return ResponseEntity.ok(curso.get());
@@ -154,7 +154,7 @@ public class CursoController {
 
     }
 
-    @DeleteMapping("/eliminar-usuario/{usuarioId}")
+    @DeleteMapping("/eliminar-curso-usuario/{usuarioId}")
     public ResponseEntity<?> eliminarCursoUsuarioPorId(@PathVariable Long usuarioId) {
         cursoService.eliminarCursoUsuarioPorId(usuarioId);
         return ResponseEntity.noContent().build();
