@@ -25,13 +25,14 @@ public class UsuarioController {
     @GetMapping("/{id}")
     // ResponseEntity<?> -> Si esta presente devuelve el usuario, caso contrario sin contenido (void) no devuelve nada en el cuerpo de la respuesta
     public ResponseEntity<?> detalle(@PathVariable Long id) {
-        Optional<Usuario> usuarioOptional = usuarioService.porId(id);
+        // Optional<Usuario> usuarioOptional = usuarioService.porId(id);
+        Optional<Usuario> o = usuarioService.porId(id);
 
-        if(usuarioOptional.isPresent()) {
+        if(o.isPresent()) {
             // Devolver status 200 y en el cuerpo el objeto Usuario
             // ResponseEntity.ok().body(usuarioOptional.get());
             // ResponseEntity.ok(usuarioOptional.get());
-            return ResponseEntity.ok(usuarioOptional.get());
+            return ResponseEntity.ok(o.get());
         }
 
         // Con build generamos la respuesta con status 404 - NOT_FOUND

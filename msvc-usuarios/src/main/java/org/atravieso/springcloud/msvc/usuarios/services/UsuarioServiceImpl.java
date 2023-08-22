@@ -40,7 +40,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<Usuario> listarUsuariosPorIds(Iterable<Long> ids) {
+    public List<Usuario> listarUsuariosPorIds(List<Long> ids) {
         return (List<Usuario>)usuarioRepository.findAllById(ids);
     }
 
