@@ -1,5 +1,7 @@
 FROM openjdk:21-ea-oracle
 
+## ------ Capa de la Imagen, cuando no cambia nada esto esta Cacheado --------
+
 ## Carpeta de trabajo dentro de este SO
 WORKDIR /app
 
@@ -8,6 +10,8 @@ COPY ./target/msvc-usuarios-0.0.1-SNAPSHOT.jar .
 
 ## Exponer el puerto de la app (Esto es opcional)
 EXPOSE 8081
+
+## -------- Capa del Contenedor ----------
 
 ## Configurar el punto de entrada de la app cuando se levanta el contenedor
 ENTRYPOINT ["java", "-jar", "msvc-usuarios-0.0.1-SNAPSHOT.jar"]
