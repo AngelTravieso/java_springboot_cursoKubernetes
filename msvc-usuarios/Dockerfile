@@ -12,7 +12,17 @@ WORKDIR /app/msvc-usuarios
 COPY ./pom.xml /app
 
 ## Copiar el proyecto completo y pegar en la raiz del directorio de trabajo (.app/msvc-usuarios)
-COPY ./msvc-usuarios .
+COPY ./msvc-usuarios/.mvn ./.mvn
+
+COPY ./msvc-usuarios/mvnw .
+COPY ./msvc-usuarios/pom.xml .
+
+## Compilar, saltar test y su compilacion; tampoco va a compilar ni ejecutar nada relacionado al codigo fuente; empaqueta el proyecto sin el codigo fuente y los tests; Eliminar carpeta "target"
+# RUN ./mvn dependency:go-offline (alternativa)
+RUN ./mvnw clean package -Dmaven.test.skip -Dmaven.main.skip -Dspring-boot.repackage.skip && rm -r ./target/
+
+## Copiar la carpeta src (el codigo fuente) en la carpeta "src" de la imagen de nuestro directorio de trabajo
+COPY ./msvc-usuarios/src ./src
 
 ## Compilar
 RUN ./mvnw clean package -DskipTests
