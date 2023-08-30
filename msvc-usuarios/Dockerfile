@@ -1,4 +1,5 @@
-FROM openjdk:21-ea-oracle
+## Usar una version alpine es más ligera
+FROM openjdk:21-ea-oracle as builder
 
 ## ------ Capa de la Imagen, cuando no cambia nada esto esta Cacheado --------
 
@@ -27,10 +28,24 @@ COPY ./msvc-usuarios/src ./src
 ## Compilar
 RUN ./mvnw clean package -DskipTests
 
+## ----------------Hasta aca llega la construccion de esta imagen -----------------
+
+## Esta es la imagen que tomara el ejecutable de la imagen previa anterior builder y poder utilizarla aca
+FROM openjdk:21-ea-oracle
+
+## Directorio de trabajo
+WORKDIR /app
+
+## Copiamos el jar de la construccion anterior y lo pegamos en el directorio app
+COPY --from=builder /app/msvc-usuarios/target/msvc-usuarios-0.0.1-SNAPSHOT.jar .
+
 ## Exponer el puerto de la app (Esto es opcional)
 EXPOSE 8081
 
 ## -------- Capa del Contenedor ----------
 
 ## Configurar el punto de entrada de la app cuando se levanta el contenedor
-ENTRYPOINT ["java", "-jar", "./target/msvc-usuarios-0.0.1-SNAPSHOT.jar"]
+##  ENTRYPOINT ["java", "-jar", "./target/msvc-usuarios-0.0.1-SNAPSHOT.jar"]
+
+## Como estamos en el directorio de trabajo /app (raiz) ejecutamos de una vez
+ENTRYPOINT ["java", "-jar", "msvc-usuarios-0.0.1-SNAPSHOT.jar"]
